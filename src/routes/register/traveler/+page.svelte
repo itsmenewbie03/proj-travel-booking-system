@@ -28,8 +28,8 @@
                 "content-type": "application/json",
                 accept: "application/json",
             },
-        });
-        alert(resp)
+        }).then((res) => res.json());
+        alert(resp);
     };
 </script>
 

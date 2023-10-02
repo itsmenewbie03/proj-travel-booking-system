@@ -1,6 +1,5 @@
 <script>
     let accommodation = {
-        accommodation_id: "",
         accommodation_name: "",
         location: "",
         room_type: "",
@@ -12,30 +11,21 @@
     };
 
     const handleSubmit = async () => {
-        const resp = await fetch("/api/register/traveler", {
+        const resp = await fetch("/api/register/accommodation", {
             method: "POST",
             body: JSON.stringify(accommodation),
             headers: {
                 "content-type": "application/json",
                 accept: "application/json",
             },
-        });
-        alert(resp);
+        }).then((res) => res.json());
+        alert(JSON.stringify(resp));
     };
 </script>
 
 <form on:submit={handleSubmit}>
     <fieldset>
         <legend>ACCOMMODATION INFO</legend>
-        <label>
-            Accommodation ID:
-            <input
-                type="text"
-                bind:value={accommodation.accommodation_id}
-                required
-            />
-        </label>
-
         <label>
             Accommodation Name:
             <input
@@ -44,26 +34,26 @@
                 required
             />
         </label>
-
+        <br />
         <label>
             Location:
             <input type="text" bind:value={accommodation.location} required />
         </label>
-
+        <br />
         <label>
             Room Type:
             <select bind:value={accommodation.room_type} required>
-                <option value="single">Single</option>
-                <option value="double">Double</option>
-                <option value="suite">Suite</option>
+                <option value="Single">Single</option>
+                <option value="Double">Double</option>
+                <option value="Suite">Suite</option>
             </select>
         </label>
-
+        <br />
         <label>
             Description:
             <textarea bind:value={accommodation.description} required />
         </label>
-
+        <br />
         <label>
             Price per Night:
             <input
@@ -72,7 +62,7 @@
                 required
             />
         </label>
-
+        <br />
         <label>
             Availability Status:
             <select bind:value={accommodation.availability_status} required>
@@ -81,7 +71,7 @@
                 <option value="Maintenance">Maintenance</option>
             </select>
         </label>
-
+        <br />
         <label>
             Check-In Date:
             <input
@@ -90,7 +80,7 @@
                 required
             />
         </label>
-
+        <br />
         <label>
             Check-Out Date:
             <input

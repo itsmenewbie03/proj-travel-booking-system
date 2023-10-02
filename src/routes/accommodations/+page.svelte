@@ -34,7 +34,7 @@
         {/each}
     </table>
 </div>
-<h4>NOT FOUND? REGISTER <a href="/register/accommodation">HERE</a></h4>
+<h4>NOT FOUND? ADD <a href="/register/accommodation">HERE</a></h4>
 
 <style>
     tr,

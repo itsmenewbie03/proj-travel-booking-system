@@ -58,6 +58,7 @@
             Price per Night:
             <input
                 type="number"
+                min="0"
                 bind:value={accommodation.price_per_night}
                 required
             />

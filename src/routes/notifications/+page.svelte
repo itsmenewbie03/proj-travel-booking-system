@@ -4,9 +4,9 @@
     $: ({ notifications } = data);
 </script>
 
-<div>
-    <table>
-        <caption>NOTIFICATIONS</caption>
+<table class="table table-auto">
+    <caption class="text-2xl m-2">NOTIFICATIONS</caption>
+    <thead>
         <tr>
             <th>Notification ID</th>
             <th>Traveler ID</th>
@@ -15,6 +15,8 @@
             <th>Timestamp</th>
             <th>Status</th>
         </tr>
+    </thead>
+    <tbody>
         {#each notifications as notification}
             <tr>
                 <td>{notification.notification_id}</td>
@@ -25,10 +27,11 @@
                 <td>{notification.status}</td>
             </tr>
         {/each}
-    </table>
-</div>
-<h4>NOT FOUND? ADD <a href="/register/notification">HERE</a></h4>
+    </tbody>
+</table>
+<div class="divider">END</div>
 
+<p class="text-lg">Notification not found? Add <a href="/register/notification" class="link link-secondary">here</a></p>
 <style>
     tr,
     th,

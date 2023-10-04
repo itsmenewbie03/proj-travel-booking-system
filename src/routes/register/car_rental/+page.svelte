@@ -23,66 +23,85 @@
 </script>
 
 <form on:submit={handleSubmit}>
-    <fieldset>
-        <legend>CAR RENTAL INFO</legend>
-        <label>
-            Rental Company:
-            <input
-                type="text"
-                bind:value={car_rental.rental_company}
-                required
-            />
-        </label>
-        <br />
-        <label>
-            Car Model:
-            <input type="text" bind:value={car_rental.car_model} required />
-        </label>
-        <br />
-        <label>
-            Location:
-            <input type="text" bind:value={car_rental.location} required />
-        </label>
-        <br />
-        <label>
-            Rental Start Date and Time:
-            <input
-                type="datetime-local"
-                bind:value={car_rental.rental_start_date_time}
-                required
-            />
-        </label>
-        <br />
-        <label>
-            Rental End Date and Time:
-            <input
-                type="datetime-local"
-                bind:value={car_rental.rental_end_date_time}
-                required
-            />
-        </label>
-        <br />
-        <label>
-            Rental Price per Day:
-            <input
-                type="number"
-                min="0"
-                bind:value={car_rental.rental_price_per_day}
-                required
-            />
-        </label>
-        <br />
-        <label>
-            Car Availability Status:
-            <select bind:value={car_rental.car_availability_status} required>
-                <option value="Available">Available</option>
-                <option value="Rented">Rented</option>
-                <option value="Maintenance">Maintenance</option>
-            </select>
-        </label>
-    </fieldset>
+    <div class="form-control">
+        <label class="label" for="rental_company">Rental Company</label>
+        <input
+            class="input input-bordered w-full"
+            type="text"
+            name="rental_company"
+            bind:value={car_rental.rental_company}
+            required
+        />
 
-    <button type="submit">Submit</button>
-    <a href="/car_rentals"><button>Back</button></a>
-    
+        <label class="label" for="car_model">Car Model</label>
+        <input
+            class="input input-bordered w-full"
+            type="text"
+            name="car_model"
+            bind:value={car_rental.car_model}
+            required
+        />
+
+        <label class="label" for="location">Location</label>
+        <input
+            class="input input-bordered w-full"
+            type="text"
+            name="location"
+            bind:value={car_rental.location}
+            required
+        />
+
+        <label class="label" for="rental_start_date_time"
+            >Rental Start Date and Time</label
+        >
+        <input
+            class="input input-bordered w-full"
+            type="datetime-local"
+            name="rental_start_date_time"
+            bind:value={car_rental.rental_start_date_time}
+            required
+        />
+
+        <label class="label" for="rental_end_date_time"
+            >Rental End Date and Time</label
+        >
+        <input
+            class="input input-bordered w-full"
+            type="datetime-local"
+            name="rental_end_date_time"
+            bind:value={car_rental.rental_end_date_time}
+            required
+        />
+
+        <label class="label" for="rental_price_per_day"
+            >Rental Price per Day</label
+        >
+        <input
+            class="input input-bordered w-full"
+            type="number"
+            min="0"
+            name="rental_price_per_day"
+            bind:value={car_rental.rental_price_per_day}
+            required
+        />
+
+        <label class="label" for="car_availability_status"
+            >Car Availability Status</label
+        >
+        <select
+            class="select select-bordered w-full"
+            name="car_availability_status"
+            bind:value={car_rental.car_availability_status}
+            required
+        >
+            <option value="Available">Available</option>
+            <option value="Rented">Rented</option>
+            <option value="Maintenance">Maintenance</option>
+        </select>
+
+        <button class="btn btn-primary mt-1" type="submit">Submit</button>
+        <a href="/car_rentals"
+            ><button class="btn btn-secondary w-full mt-1">Back</button></a
+        >
+    </div>
 </form>

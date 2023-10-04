@@ -1,14 +1,14 @@
 <script lang="ts">
-    import type { PageData } from './$types';
-    
+    import type { PageData } from "./$types";
+
     export let data: PageData;
     $: ({ accommodations } = data);
-
 </script>
-<div>
-    <table>
-        <caption>ACCOMMODATIONS</caption>
-        <tr>
+
+<table class="table table-auto">
+    <caption class="text-2xl m-2">ACCOMMODATIONS</caption>
+    <thead
+        ><tr>
             <th>Accommodation ID</th>
             <th>Accommodation Name</th>
             <th>Location</th>
@@ -19,6 +19,8 @@
             <th>Check-in Date</th>
             <th>Check-out Date</th>
         </tr>
+    </thead>
+    <tbody>
         {#each accommodations as accommodation}
             <tr>
                 <td>{accommodation.accommodation_id}</td>
@@ -32,9 +34,10 @@
                 <td>{accommodation.check_in_date}</td>
             </tr>
         {/each}
-    </table>
-</div>
-<h4>NOT FOUND? ADD <a href="/register/accommodation">HERE</a></h4>
+    </tbody>
+</table>
+<div class="divider">END</div>
+<p class="text-lg">Accommodation not found? Add <a href="/register/accommodation" class="link link-secondary">here</a></p>
 
 <style>
     tr,

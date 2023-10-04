@@ -5,9 +5,9 @@
     $: ({ car_rentals } = data);
 </script>
 
-<div>
-    <table>
-        <caption>CAR RENTALS</caption>
+<table class="table table-auto">
+    <caption class="text-2xl m-2">CAR RENTALS</caption>
+    <thead>
         <tr>
             <th>Car Rental ID</th>
             <th>Rental Company</th>
@@ -18,6 +18,8 @@
             <th>Rental Price per Day</th>
             <th>Car Availability Status</th>
         </tr>
+    </thead>
+    <tbody>
         {#each car_rentals as car_rental}
             <tr>
                 <td>{car_rental.car_rental_id}</td>
@@ -30,9 +32,15 @@
                 <td>{car_rental.car_availability_status}</td>
             </tr>
         {/each}
-    </table>
-</div>
-<h4>NOT FOUND? ADD <a href="/register/car_rental">HERE</a></h4>
+    </tbody>
+</table>
+<div class="divider">END</div>
+<p class="text-lg">
+    Car Rental not found? Add <a
+        href="/register/car_rental"
+        class="link link-secondary">here</a
+    >
+</p>
 
 <style>
     tr,

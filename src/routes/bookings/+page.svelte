@@ -5,9 +5,9 @@
     $: ({ bookings } = data);
 </script>
 
-<div>
-    <table>
-        <caption>BOOKINGS</caption>
+<table class="table table-auto">
+    <caption class="text-2xl m-2">BOOKINGS</caption>
+    <thead>
         <tr>
             <th>Booking ID</th>
             <th>Traveler ID</th>
@@ -19,6 +19,8 @@
             <th>Payment Status</th>
             <th>Booking Status</th>
         </tr>
+    </thead>
+    <tbody>
         {#each bookings as booking}
             <tr>
                 <td>{booking.booking_id}</td>
@@ -32,9 +34,10 @@
                 <td>{booking.booking_status}</td>
             </tr>
         {/each}
-    </table>
-</div>
-<h4>NOT FOUND? CREATE <a href="/register/booking">HERE</a></h4>
+    </tbody>
+</table>
+<div class="divider">END</div>
+<p class="text-lg">Booking not found? Create <a href="/register/booking" class="link link-secondary">here</a></p>
 
 <style>
     tr,

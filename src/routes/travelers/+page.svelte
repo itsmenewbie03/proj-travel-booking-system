@@ -4,9 +4,9 @@
     $: ({ travelers } = data);
 </script>
 
-<div>
-    <table>
-        <caption>TRAVELERS</caption>
+<table class="table table-md able-auto">
+    <caption class="text-2xl m-2">TRAVELERS</caption>
+    <thead>
         <tr>
             <th>Traveler ID</th>
             <th>First Name</th>
@@ -22,6 +22,8 @@
             <th>Credit Card Number</th>
             <th>Expiration Date</th>
         </tr>
+    </thead>
+    <tbody>
         {#each travelers as traveler}
             <tr>
                 <td>{traveler.traveler_id}</td>
@@ -39,9 +41,10 @@
                 <td>{traveler.payment_information.expiration_date}</td>
             </tr>
         {/each}
-    </table>
-</div>
-<h4>NOT FOUND? REGISTER <a href="/register/traveler">HERE</a></h4>
+    </tbody>
+</table>
+<div class="divider">END</div>
+<p class="text-lg">Traveler not found? Register <a href="/register/traveler" class="link link-secondary">here</a></p>
 
 <style>
     tr,

@@ -5,9 +5,9 @@
     $: ({ flights } = data);
 </script>
 
-<div>
-    <table>
-        <caption>FLIGHTS</caption>
+<table class="table table-auto">
+    <caption class="text-2xl m-2">FLIGHTS</caption>
+    <thead>
         <tr>
             <th>Flight ID</th>
             <th>Airline</th>
@@ -20,6 +20,8 @@
             <th>Ticker Price</th>
             <th>Class</th>
         </tr>
+    </thead>
+    <tbody>
         {#each flights as flight}
             <tr>
                 <td>{flight.flight_id}</td>
@@ -34,9 +36,10 @@
                 <td>{flight.class}</td>
             </tr>
         {/each}
-    </table>
-</div>
-<h4>NOT FOUND? ADD <a href="/register/flight">HERE</a></h4>
+    </tbody>
+</table>
+<div class="divider">END</div>
+<p class="text-lg">Flight not found? Add <a href="/register/flight" class="link link-secondary">here</a></p>
 
 <style>
     tr,

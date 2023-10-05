@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { goto } from "$app/navigation";
     let traveler = {
         first_name: "",
         last_name: "",
@@ -19,7 +20,9 @@
             expiration_date: "",
         },
     };
-
+    const back = () => {
+        goto("/travelers");
+    };
     const handleSubmit = async (event: Event) => {
         event.preventDefault();
         const resp = await fetch("/api/register/traveler", {
@@ -30,7 +33,7 @@
                 accept: "application/json",
             },
         }).then((res) => res.json());
-        alert(resp);
+        alert(JSON.stringify(resp));
     };
 </script>
 
@@ -148,8 +151,12 @@
             <button class="btn btn-primary w-full mt-2" type="submit"
                 >Submit</button
             >
-            <a href="/travelers"
-                ><button class="btn btn-secondary w-full mt-2">Back</button></a
+            <button
+                class="btn btn-secondary w-full mt-2"
+                on:click={(event) => {
+                    event.preventDefault();
+                    back();
+                }}>Back</button
             >
         </div>
     </div>

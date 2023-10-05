@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { PageData } from "./$types";
-
+    import { goto } from "$app/navigation";
     export let data: PageData;
     let traveler = {
         first_name: "",
@@ -24,7 +24,7 @@
     };
     traveler = data.traveler_data[0];
 
-    const handleSubmit = async (event:Event) => {
+    const handleSubmit = async (event: Event) => {
         event.preventDefault();
         const resp = await fetch("/api/register/traveler", {
             method: "POST",
@@ -35,6 +35,9 @@
             },
         }).then((res) => res.json());
         alert(resp);
+    };
+    const back = () => {
+        goto("/travelers");
     };
 </script>
 
@@ -152,8 +155,13 @@
             <button class="btn btn-primary w-full mt-2" type="submit"
                 >Submit</button
             >
-            <a href="/travelers"
-                ><button class="btn btn-secondary w-full mt-2">Back</button></a
+
+            <button
+                class="btn btn-secondary w-full mt-2"
+                on:click={(event) => {
+                    event.preventDefault();
+                    back();
+                }}>Back</button
             >
         </div>
     </div>

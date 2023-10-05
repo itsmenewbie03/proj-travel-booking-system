@@ -1,11 +1,15 @@
 <script lang="ts">
-    import { goto } from "$app/navigation";
+    import { goto, invalidate, invalidateAll } from "$app/navigation";
+    import { walk } from "svelte/compiler";
     // $: ({ travelers } = data);
-    import { travelers } from "../../stores/Travelers";
-    console.log(`Traveler Store: ${JSON.stringify(travelers)}`);
+    import type { PageData } from "./$types";
+    export let data: PageData;
+
+    $: ({ travelers } = data);
     const edit_id = (id: string) => {
         goto(`/register/traveler/${id}`);
     };
+
     const delete_id = async (id: string) => {
         const resp = await fetch("/api/register/traveler", {
             method: "DELETE",
@@ -17,11 +21,12 @@
                 "content-type": "application/json",
             },
         }).then((res) => res.json());
+        await invalidateAll();
         alert(`BYE BYE: ${JSON.stringify(resp)}`);
     };
 </script>
 
-{#if $travelers.length > 0}
+{#if travelers.length > 0}
     <table class="table table-md able-auto">
         <caption class="text-2xl m-2">TRAVELERS</caption>
         <thead>
@@ -43,7 +48,7 @@
             </tr>
         </thead>
         <tbody>
-            {#each $travelers as traveler}
+            {#each travelers as traveler}
                 <tr>
                     <td>{traveler.traveler_id}</td>
                     <td>{traveler.first_name}</td>

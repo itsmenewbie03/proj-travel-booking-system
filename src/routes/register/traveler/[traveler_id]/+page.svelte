@@ -1,4 +1,7 @@
 <script lang="ts">
+    import type { PageData } from "./$types";
+
+    export let data: PageData;
     let traveler = {
         first_name: "",
         last_name: "",
@@ -19,8 +22,9 @@
             expiration_date: "",
         },
     };
+    traveler = data.traveler_data[0];
 
-    const handleSubmit = async (event: Event) => {
+    const handleSubmit = async (event:Event) => {
         event.preventDefault();
         const resp = await fetch("/api/register/traveler", {
             method: "POST",

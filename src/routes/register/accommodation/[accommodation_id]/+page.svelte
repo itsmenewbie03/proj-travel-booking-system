@@ -1,4 +1,8 @@
-<script>
+<script lang="ts">
+    import { goto } from "$app/navigation";
+    import type { PageData } from "./$types";
+    export let data: PageData;
+
     let accommodation = {
         accommodation_name: "",
         location: "",
@@ -9,8 +13,10 @@
         check_in_date: "",
         check_out_date: "",
     };
+    accommodation = data.traveler_data[0];
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (event: Event) => {
+        event.preventDefault();
         const resp = await fetch("/api/register/accommodation", {
             method: "POST",
             body: JSON.stringify(accommodation),
@@ -20,6 +26,9 @@
             },
         }).then((res) => res.json());
         alert(JSON.stringify(resp));
+    };
+    const back = () => {
+        goto("/accommodations");
     };
 </script>
 
@@ -50,7 +59,6 @@
             bind:value={accommodation.room_type}
             required
         >
-            <option value="">Select Room Type</option>
             <option value="Single">Single</option>
             <option value="Double">Double</option>
             <option value="Suite">Suite</option>
@@ -83,7 +91,6 @@
             bind:value={accommodation.availability_status}
             required
         >
-            <option value="">Select Availability Status</option>
             <option value="Available">Available</option>
             <option value="Booked">Booked</option>
             <option value="Maintenance">Maintenance</option>
@@ -108,8 +115,12 @@
         />
 
         <button class="btn btn-primary mt-1" type="submit">Submit</button>
-        <a href="/accommodations"
-            ><button class="btn btn-secondary w-full mt-1">Back</button></a
+        <button
+            class="btn btn-secondary w-full mt-1"
+            on:click={(event) => {
+                event.preventDefault();
+                back();
+            }}>Back</button
         >
     </div>
 </form>

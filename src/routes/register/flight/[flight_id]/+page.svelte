@@ -1,6 +1,7 @@
 <script lang="ts">
+    import type { PageData } from "./$types";
     import { goto } from "$app/navigation";
-
+    export let data: PageData;
     let flight = {
         airline: "",
         flight_number: "",
@@ -12,10 +13,12 @@
         ticket_price: 0,
         class: "",
     };
+    flight = data.flight_data[0];
 
     const back = () => {
         goto("/flights");
     };
+
     const handleSubmit = async (event: Event) => {
         event.preventDefault();
         const resp = await fetch("/api/register/flight", {

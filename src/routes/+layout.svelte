@@ -1,5 +1,7 @@
-<script>
+<script lang="ts">
     import "../app.css";
+    import { slide } from "svelte/transition";
+    export let data;
 </script>
 
 <div class="flex flex-col min-h-screen">
@@ -20,9 +22,17 @@
             </ul>
         </div>
     </div>
-    <div class="flex-grow">
-        <slot />
-    </div>
+
+    {#key data.url}
+        <div
+            class="flex-grow"
+            in:slide={{ duration: 300, delay: 300, axis: "x" }}
+            out:slide={{ duration: 300, axis: "x" }}
+        >
+            <slot />
+        </div>
+    {/key}
+
     <footer class="footer footer-center p-4 bg-base-300 text-base-content">
         <aside>
             <p>

@@ -1,4 +1,7 @@
-<script>
+<script lang="ts">
+    import type { PageData } from "./$types";
+    import { goto } from "$app/navigation";
+    export let data: PageData;
     let car_rental = {
         rental_company: "",
         car_model: "",
@@ -9,7 +12,13 @@
         car_availability_status: "",
     };
 
-    const handleSubmit = async () => {
+    car_rental = data.car_rental_data[0];
+
+    const back = () => {
+        goto("/car_rentals");
+    };
+    const handleSubmit = async (event: Event) => {
+        event.preventDefault();
         const resp = await fetch("/api/register/car_rental", {
             method: "POST",
             body: JSON.stringify(car_rental),
@@ -101,8 +110,12 @@
         </select>
 
         <button class="btn btn-primary mt-1" type="submit">Submit</button>
-        <a href="/car_rentals"
-            ><button class="btn btn-secondary w-full mt-1">Back</button></a
+        <button
+            class="btn btn-secondary w-full mt-1"
+            on:click={(event) => {
+                event.preventDefault();
+                back();
+            }}>Back</button
         >
     </div>
 </form>

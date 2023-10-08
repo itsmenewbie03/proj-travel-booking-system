@@ -133,7 +133,7 @@
 
         <label class="label" for="total_price">Total Price</label>
         <input
-            class="input input-bordered w-full"
+            class="input input-bordered input-disabled w-full"
             type="number"
             bind:value={booking.total_price}
             required

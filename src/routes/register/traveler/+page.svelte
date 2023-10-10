@@ -1,8 +1,7 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import { Alert } from 'flowbite-svelte';
-    
-    let traveler = {    
+    import { json } from "@sveltejs/kit";
+    let traveler = {
         first_name: "",
         last_name: "",
         date_of_birth: "",
@@ -22,6 +21,9 @@
             expiration_date: "",
         },
     };
+    let success_modal: HTMLDialogElement;
+    let fail_modal: HTMLDialogElement;
+    let fail_message: string;
     const back = () => {
         goto("/travelers");
     };
@@ -35,10 +37,45 @@
                 accept: "application/json",
             },
         }).then((res) => res.json());
-        
-        alert(JSON.stringify(resp));
+        // {"acknowledged":true,"insertedId":"6524bbb64412d20653e0a539"} success insert
+        // console.log("bool check: ",resp?.insertedId,resp?.insertedId && resp.acknowledged)
+        if (resp.acknowledged && resp?.insertedId) {
+            success_modal.showModal();
+        } else {
+            fail_message = JSON.stringify(resp);
+            fail_modal.showModal();
+        }
     };
 </script>
+
+<dialog id="success_modal" class="modal" bind:this={success_modal}>
+    <div class="modal-box">
+        <form method="dialog">
+            <button
+                class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                >✕</button
+            >
+        </form>
+        <h3 class="font-bold text-lg">Success</h3>
+        <p class="py-4">Traveler added successfully.</p>
+    </div>
+</dialog>
+
+<dialog id="fail_modal" class="modal" bind:this={fail_modal}>
+    <div class="modal-box">
+        <form method="dialog">
+            <button
+                class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                >✕</button
+            >
+        </form>
+        <h3 class="font-bold text-lg">Error</h3>
+        <p class="py-4">
+            Something went wrong while trying to add the traveler.<br />
+            API Response: {fail_message}
+        </p>
+    </div>
+</dialog>
 
 <form on:submit={handleSubmit}>
     <div class="form-control grid grid-cols-2 gap-4">
@@ -87,6 +124,7 @@
                 type="email"
                 name="email"
                 bind:value={traveler.contact_information.email}
+                required
             />
 
             <label class="label" for="tel">Phone</label>
@@ -95,6 +133,7 @@
                 type="tel"
                 name="tel"
                 bind:value={traveler.contact_information.phone}
+                required
             />
         </div>
         <div>
@@ -104,6 +143,7 @@
                 type="text"
                 name="address"
                 bind:value={traveler.contact_information.address}
+                required
             />
             <label class="label" for="pass_num">Passport Number</label>
             <input
@@ -111,6 +151,7 @@
                 type="text"
                 name="pass_num"
                 bind:value={traveler.passport_information.passport_number}
+                required
             />
 
             <label class="label" for="pass_exp">
@@ -121,6 +162,7 @@
                 type="date"
                 name="pass_exp"
                 bind:value={traveler.passport_information.expiration_date}
+                required
             />
 
             <label class="label" for="country_of_issue">
@@ -131,6 +173,7 @@
                 type="text"
                 name="country_of_issue"
                 bind:value={traveler.passport_information.country_of_issue}
+                required
             />
 
             <label class="label" for="ccn"> Credit Card Number</label>
@@ -140,6 +183,7 @@
                 name="ccn"
                 maxlength="16"
                 bind:value={traveler.payment_information.credit_card_number}
+                required
             />
 
             <label class="label" for="exp_date"> Expiration Date</label>
@@ -148,6 +192,7 @@
                 type="date"
                 name="exp_date"
                 bind:value={traveler.payment_information.expiration_date}
+                required
             />
         </div>
         <div class="col-span-2">

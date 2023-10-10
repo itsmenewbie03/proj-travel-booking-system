@@ -9,7 +9,7 @@
         goto(`/register/notification/${id}`);
     };
     
-    const delete_id = async (id: string) => {
+    const confirm_delete = async (id: string) => {
         const resp = await fetch("/api/register/notification", {
             method: "DELETE",
             body: JSON.stringify({
@@ -76,7 +76,7 @@
                     <button
                         class="btn btn-secondary w-full mt-1"
                         on:click={async (event) => {
-                            await delete_id(notification.notification_id);
+                            await confirm_delete(notification.notification_id);
                         }}
                         ><svg
                             viewBox="0 0 448 512"

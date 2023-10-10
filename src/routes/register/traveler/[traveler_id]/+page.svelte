@@ -23,6 +23,9 @@
         },
     };
     traveler = data.traveler_data[0];
+    let modal: HTMLDialogElement;
+    let status: string;
+    let msg: string;
 
     const handleSubmit = async (event: Event) => {
         event.preventDefault();
@@ -34,13 +37,41 @@
                 accept: "application/json",
             },
         }).then((res) => res.json());
-        alert(resp);
+        if (resp.acknowledged && resp.modifiedCount) {
+            status = "Success";
+            msg = "Traveler updated successfully.";
+            modal.showModal();
+        } else {
+            status = "Error";
+            msg =
+                resp?.matchedCount > 0 && !resp?.modifiedCount
+                    ? "No changes detected."
+                    : "Failed to update the traveler.";
+            modal.showModal();
+            console.log(
+                `[${Date.now()}] Hey Developer You Got a Problem: ${JSON.stringify(
+                    resp
+                )}`
+            );
+        }
     };
     const back = () => {
         goto("/travelers");
     };
 </script>
 
+<dialog id="success_modal" class="modal" bind:this={modal}>
+    <div class="modal-box">
+        <form method="dialog">
+            <button
+                class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                >✕</button
+            >
+        </form>
+        <h3 class="font-bold text-lg">{status}</h3>
+        <p class="py-4">{msg}</p>
+    </div>
+</dialog>
 <form on:submit={handleSubmit}>
     <div class="form-control grid grid-cols-2 gap-4">
         <div>

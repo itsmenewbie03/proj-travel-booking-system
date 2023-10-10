@@ -8,7 +8,7 @@
         goto(`/register/car_rental/${id}`);
     };
 
-    const delete_id = async (id: string) => {
+    const confirm_delete = async (id: string) => {
         const resp = await fetch("/api/register/car_rental", {
             method: "DELETE",
             body: JSON.stringify({
@@ -79,7 +79,7 @@
                     <button
                         class="btn btn-secondary w-full mt-1"
                         on:click={async (event) => {
-                            await delete_id(car_rental.car_rental_id);
+                            await confirm_delete(car_rental.car_rental_id);
                         }}
                         ><svg
                             viewBox="0 0 448 512"

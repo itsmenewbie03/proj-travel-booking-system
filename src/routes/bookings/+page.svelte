@@ -8,7 +8,7 @@
         goto(`/register/booking/${id}`);
     };
 
-    const delete_id = async (id: string) => {
+    const confirm_delete = async (id: string) => {
         const resp = await fetch("/api/register/booking", {
             method: "DELETE",
             body: JSON.stringify({
@@ -81,7 +81,7 @@
                     <button
                         class="btn btn-secondary w-full mt-1"
                         on:click={async (event) => {
-                            await delete_id(booking.booking_id);
+                            await confirm_delete(booking.booking_id);
                         }}
                         ><svg
                             viewBox="0 0 448 512"

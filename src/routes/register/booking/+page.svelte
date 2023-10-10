@@ -2,7 +2,7 @@
     //@ts-nocheck
     import { compute_duration } from "./../../../utils/DateMagic";
     import type { PageData } from "./$types";
-
+    import { goto } from "$app/navigation";
     export let data: PageData;
     $: ({ accommodation_ids, car_rental_ids, flight_ids, traveler_ids } = data);
     let booking = {
@@ -14,6 +14,9 @@
         booking_date_time: "",
         payment_status: "",
         booking_status: "",
+    };
+    const back = () => {
+        goto("/bookings");
     };
     const compute_cost = (event?: Event) => {
         event?.preventDefault();
@@ -56,7 +59,8 @@
         booking.total_price = total_cost;
         return total_cost;
     };
-    const handleSubmit = async () => {
+    const handleSubmit = async (event: Event) => {
+        event.preventDefault();
         booking.total_price = compute_cost();
         const response = await fetch("/api/register/booking", {
             method: "POST",
@@ -183,8 +187,13 @@
                 on:click={compute_cost}>Compute Cost</button
             >
         </div>
-        <a href="/bookings"
-            ><button class="btn btn-secondary mt-1 w-full">Back</button></a
+
+        <button
+            class="btn btn-secondary mt-1 w-full"
+            on:click={(event) => {
+                event.preventDefault();
+                back();
+            }}>Back</button
         >
     </div>
 </form>

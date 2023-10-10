@@ -6,7 +6,9 @@ const gen_primary_key = (document: WithId<any>[]): string => {
     let last_id = "";
     for (const key of doc_keys) {
         if (/\w+_id$/.test(key)) {
+            console.log(`The key ${key} passed the test!`)
             last_id = doc[key];
+            break;
         }
     }
     console.log(`Will increment last_id: ${last_id}`);

@@ -3,7 +3,9 @@
     import type { PageData } from "./$types";
 
     export let data: PageData;
+
     $: ({ flights } = data);
+    
     const edit_id = (id: string) => {
         goto(`/register/flight/${id}`);
     };

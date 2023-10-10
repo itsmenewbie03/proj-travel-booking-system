@@ -5,6 +5,7 @@ import type { Traveler } from "../../../models/Traveler";
 import type { Accommodation } from "../../../models/Accommodation";
 import type { Flight } from "../../../models/Flight";
 import type { CarRental } from "../../../models/CarRental";
+
 export const load = (async () => {
     const traveler_col: Collection<Traveler> = db.collection("Traveler");
     const traveler_data = await traveler_col

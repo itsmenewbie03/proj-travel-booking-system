@@ -1,6 +1,8 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    let traveler = {
+    import { Alert } from 'flowbite-svelte';
+    
+    let traveler = {    
         first_name: "",
         last_name: "",
         date_of_birth: "",
@@ -33,6 +35,7 @@
                 accept: "application/json",
             },
         }).then((res) => res.json());
+        
         alert(JSON.stringify(resp));
     };
 </script>

@@ -1,9 +1,8 @@
 <script lang="ts">
-    import type { PageData } from "./$types";
     import { goto } from "$app/navigation";
+    import type { PageData } from "./$types";
 
     export let data: PageData;
-    $: ({ ids } = data);
 
     let notification = {
         traveler_id: "",
@@ -12,9 +11,13 @@
         timestamp: "",
         status: "",
     };
+
     const back = () => {
         goto("/notifications");
     };
+
+    notification = data.notification_data[0];
+
     const handleSubmit = async (event: Event) => {
         event.preventDefault();
         const resp = await fetch("/api/register/notification", {
@@ -32,18 +35,13 @@
 <form on:submit={handleSubmit}>
     <div class="form-control">
         <label class="label" for="traveler_id">Traveler ID</label>
-        <select
-            class="select select-bordered w-full"
+        <input
+            class="select select-bordered select-disabled w-full"
             name="traveler_id"
             bind:value={notification.traveler_id}
             required
-        >
-            <option value="">Select Traveler ID</option>
-
-            {#each ids as id}
-                <option value={id.traveler_id}>{id.traveler_id}</option>
-            {/each}
-        </select>
+            readonly
+        />
 
         <label class="label" for="notification_type">Notification Type</label>
         <input

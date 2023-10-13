@@ -1,6 +1,10 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import { json } from "@sveltejs/kit";
+
+    import { _alert, Toaster } from "$lib/utils/CustomAlert";
+    let success: boolean;
+    let message: string;
+
     let traveler = {
         first_name: "",
         last_name: "",
@@ -21,9 +25,7 @@
             expiration_date: "",
         },
     };
-    let success_modal: HTMLDialogElement;
-    let fail_modal: HTMLDialogElement;
-    let fail_message: string;
+
     const back = () => {
         goto("/travelers");
     };
@@ -40,42 +42,17 @@
         // {"acknowledged":true,"insertedId":"6524bbb64412d20653e0a539"} success insert
         // console.log("bool check: ",resp?.insertedId,resp?.insertedId && resp.acknowledged)
         if (resp.acknowledged && resp?.insertedId) {
-            success_modal.showModal();
+            success = true;
+            message = "Traveler added successfully.";
         } else {
-            fail_message = JSON.stringify(resp);
-            fail_modal.showModal();
+            success = false;
+            message = "Failed to add traveler.";
         }
+        _alert(success, message);
     };
 </script>
 
-<dialog id="success_modal" class="modal" bind:this={success_modal}>
-    <div class="modal-box">
-        <form method="dialog">
-            <button
-                class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-                >✕</button
-            >
-        </form>
-        <h3 class="font-bold text-lg">Success</h3>
-        <p class="py-4">Traveler added successfully.</p>
-    </div>
-</dialog>
-
-<dialog id="fail_modal" class="modal" bind:this={fail_modal}>
-    <div class="modal-box">
-        <form method="dialog">
-            <button
-                class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-                >✕</button
-            >
-        </form>
-        <h3 class="font-bold text-lg">Error</h3>
-        <p class="py-4">
-            Something went wrong while trying to add the traveler.<br />
-            API Response: {fail_message}
-        </p>
-    </div>
-</dialog>
+<Toaster />
 
 <form on:submit={handleSubmit}>
     <div class="form-control grid grid-cols-2 gap-4">

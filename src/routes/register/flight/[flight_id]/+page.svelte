@@ -2,6 +2,11 @@
     import type { PageData } from "./$types";
     import { goto } from "$app/navigation";
     export let data: PageData;
+
+    import { _alert, Toaster } from "$lib/utils/CustomAlert";
+    let success: boolean;
+    let message: string;
+
     let flight = {
         airline: "",
         flight_number: "",
@@ -29,9 +34,27 @@
                 accept: "application/json",
             },
         }).then((res) => res.json());
-        alert(JSON.stringify(resp));
+        if (resp.acknowledged && resp.modifiedCount) {
+            success = true;
+            message = "Flight updated successfully.";
+        } else {
+            success = false;
+            message =
+                resp?.matchedCount > 0 && !resp?.modifiedCount
+                    ? "No changes detected."
+                    : "Failed to update flight.";
+            // print a log coz why not?
+            console.log(
+                `[${Date.now()}] Hey Developer You Got a Problem: ${JSON.stringify(
+                    resp
+                )}`
+            );
+        }
+        _alert(success, message);
     };
 </script>
+
+<Toaster />
 
 <form on:submit={handleSubmit}>
     <div class="form-control grid grid-cols-2 gap-1">

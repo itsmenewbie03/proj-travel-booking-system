@@ -4,6 +4,10 @@
 
     export let data: PageData;
 
+    import { _alert, Toaster } from "$lib/utils/CustomAlert";
+    let success: boolean;
+    let message: string;
+
     let notification = {
         traveler_id: "",
         notification_type: "",
@@ -28,9 +32,27 @@
                 accept: "application/json",
             },
         }).then((res) => res.json());
-        alert(JSON.stringify(resp));
+        if (resp.acknowledged && resp.modifiedCount) {
+            success = true;
+            message = "Notification updated successfully.";
+        } else {
+            success = false;
+            message =
+                resp?.matchedCount > 0 && !resp?.modifiedCount
+                    ? "No changes detected."
+                    : "Failed to update notification.";
+            // print a log coz why not?
+            console.log(
+                `[${Date.now()}] Hey Developer You Got a Problem: ${JSON.stringify(
+                    resp
+                )}`
+            );
+        }
+        _alert(success, message);
     };
 </script>
+
+<Toaster />
 
 <form on:submit={handleSubmit}>
     <div class="form-control">

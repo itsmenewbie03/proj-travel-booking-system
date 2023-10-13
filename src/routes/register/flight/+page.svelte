@@ -1,6 +1,10 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
 
+    import { _alert, Toaster } from "$lib/utils/CustomAlert";
+    let success: boolean;
+    let message: string;
+
     let flight = {
         airline: "",
         flight_number: "",
@@ -26,9 +30,18 @@
                 accept: "application/json",
             },
         }).then((res) => res.json());
-        alert(JSON.stringify(resp));
+        if (resp.acknowledged && resp?.insertedId) {
+            success = true;
+            message = "Flight added successfully.";
+        } else {
+            success = false;
+            message = "Failed to add flight.";
+        }
+        _alert(success, message);
     };
 </script>
+
+<Toaster />
 
 <form on:submit={handleSubmit}>
     <div class="form-control grid grid-cols-2 gap-1">

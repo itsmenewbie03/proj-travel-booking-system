@@ -3,6 +3,11 @@
     import { compute_duration } from "./../../../utils/DateMagic";
     import type { PageData } from "./$types";
     import { goto } from "$app/navigation";
+
+    import { _alert, Toaster } from "$lib/utils/CustomAlert";
+    let success: boolean;
+    let message: string;
+
     export let data: PageData;
     $: ({ accommodation_ids, car_rental_ids, flight_ids, traveler_ids } = data);
     let booking = {
@@ -25,7 +30,8 @@
             !booking.flight_id ||
             !booking.car_rental_id
         ) {
-            alert(
+            _alert(
+                false,
                 "Please finish selecting accommodation, flight, and car rental first!"
             );
             return 0;
@@ -62,16 +68,25 @@
     const handleSubmit = async (event: Event) => {
         event.preventDefault();
         booking.total_price = compute_cost();
-        const response = await fetch("/api/register/booking", {
+        const resp = await fetch("/api/register/booking", {
             method: "POST",
             body: JSON.stringify(booking),
             headers: {
                 "Content-Type": "application/json",
             },
         }).then((res) => res.json());
-        alert(JSON.stringify(response));
+        if (resp.acknowledged && resp?.insertedId) {
+            success = true;
+            message = "Booking added successfully.";
+        } else {
+            success = false;
+            message = "Failed to add booking.";
+        }
+        _alert(success, message);
     };
 </script>
+
+<Toaster />
 
 <form on:submit={handleSubmit}>
     <div class="form-control">

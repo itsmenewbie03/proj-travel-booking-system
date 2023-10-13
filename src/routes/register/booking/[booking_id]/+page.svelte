@@ -3,6 +3,10 @@
 
     export let data: PageData;
 
+    import { _alert, Toaster } from "$lib/utils/CustomAlert";
+    let success: boolean;
+    let message: string;
+
     let booking = {
         traveler_id: "",
         accommodation_id: "",
@@ -55,17 +59,36 @@
     //     booking.total_price = total_cost;
     //     return total_cost;
     // };
-    const handleSubmit = async () => {
-        const response = await fetch("/api/register/booking", {
+    const handleSubmit = async (event: Event) => {
+        event.preventDefault();
+        const resp = await fetch("/api/register/booking", {
             method: "POST",
             body: JSON.stringify(booking),
             headers: {
                 "Content-Type": "application/json",
             },
         }).then((res) => res.json());
-        alert(JSON.stringify(response));
+        if (resp.acknowledged && resp.modifiedCount) {
+            success = true;
+            message = "Booking updated successfully.";
+        } else {
+            success = false;
+            message =
+                resp?.matchedCount > 0 && !resp?.modifiedCount
+                    ? "No changes detected."
+                    : "Failed to update booking.";
+            // print a log coz why not?
+            console.log(
+                `[${Date.now()}] Hey Developer You Got a Problem: ${JSON.stringify(
+                    resp
+                )}`
+            );
+        }
+        _alert(success, message);
     };
 </script>
+
+<Toaster />
 
 <form on:submit={handleSubmit}>
     <div class="form-control">
@@ -152,9 +175,8 @@
             <button class="flex-1 btn btn-primary w-1/2 join-item" type="submit"
                 >Submit</button
             >
-            <button
-                class="flex-1 btn btn-disabled w-1/2 join-item"
-                disabled>Compute Cost</button
+            <button class="flex-1 btn btn-disabled w-1/2 join-item" disabled
+                >Compute Cost</button
             >
         </div>
         <a href="/bookings"

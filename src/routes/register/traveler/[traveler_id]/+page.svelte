@@ -2,6 +2,11 @@
     import type { PageData } from "./$types";
     import { goto } from "$app/navigation";
     export let data: PageData;
+
+    import { _alert, Toaster } from "$lib/utils/CustomAlert";
+    let success: boolean;
+    let message: string;
+
     let traveler = {
         first_name: "",
         last_name: "",
@@ -23,9 +28,6 @@
         },
     };
     traveler = data.traveler_data[0];
-    let modal: HTMLDialogElement;
-    let status: string;
-    let msg: string;
 
     const handleSubmit = async (event: Event) => {
         event.preventDefault();
@@ -38,40 +40,30 @@
             },
         }).then((res) => res.json());
         if (resp.acknowledged && resp.modifiedCount) {
-            status = "Success";
-            msg = "Traveler updated successfully.";
-            modal.showModal();
+            success = true;
+            message = "Traveler updated successfully.";
         } else {
-            status = "Error";
-            msg =
+            success = false;
+            message =
                 resp?.matchedCount > 0 && !resp?.modifiedCount
                     ? "No changes detected."
-                    : "Failed to update the traveler.";
-            modal.showModal();
+                    : "Failed to update traveler.";
+            // print a log coz why not?
             console.log(
                 `[${Date.now()}] Hey Developer You Got a Problem: ${JSON.stringify(
                     resp
                 )}`
             );
         }
+        _alert(success, message);
     };
     const back = () => {
         goto("/travelers");
     };
 </script>
 
-<dialog id="success_modal" class="modal" bind:this={modal}>
-    <div class="modal-box">
-        <form method="dialog">
-            <button
-                class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-                >✕</button
-            >
-        </form>
-        <h3 class="font-bold text-lg">{status}</h3>
-        <p class="py-4">{msg}</p>
-    </div>
-</dialog>
+<Toaster />
+
 <form on:submit={handleSubmit}>
     <div class="form-control grid grid-cols-2 gap-4">
         <div>

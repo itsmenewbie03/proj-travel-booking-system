@@ -5,6 +5,10 @@
     export let data: PageData;
     $: ({ ids } = data);
 
+    import { _alert, Toaster } from "$lib/utils/CustomAlert";
+    let success: boolean;
+    let message: string;
+
     let notification = {
         traveler_id: "",
         notification_type: "",
@@ -25,9 +29,18 @@
                 accept: "application/json",
             },
         }).then((res) => res.json());
-        alert(JSON.stringify(resp));
+        if (resp.acknowledged && resp?.insertedId) {
+            success = true;
+            message = "Notification added successfully.";
+        } else {
+            success = false;
+            message = "Failed to add notification.";
+        }
+        _alert(success, message);
     };
 </script>
+
+<Toaster />
 
 <form on:submit={handleSubmit}>
     <div class="form-control">

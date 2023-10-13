@@ -1,5 +1,7 @@
 <script lang="ts">
     import { _alert, Toaster } from "$lib/utils/CustomAlert";
+    let success: boolean;
+    let message: string;
 
     let accommodation = {
         accommodation_name: "",
@@ -12,10 +14,8 @@
         check_out_date: "",
     };
 
-    let success: boolean;
-    let message: string;
-
-    const handleSubmit = async () => {
+    const handleSubmit = async (event: Event) => {
+        event.preventDefault();
         const resp = await fetch("/api/register/accommodation", {
             method: "POST",
             body: JSON.stringify(accommodation),
@@ -36,6 +36,7 @@
 </script>
 
 <Toaster />
+
 <form on:submit={handleSubmit}>
     <div class="form-control">
         <label class="label" for="accommodation_name">Accommodation Name</label>

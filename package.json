@@ -26,6 +26,7 @@
   },
   "type": "module",
   "dependencies": {
-    "mongodb": "^6.1.0"
+    "mongodb": "^6.1.0",
+    "svelte-french-toast": "^1.2.0"
   }
 }

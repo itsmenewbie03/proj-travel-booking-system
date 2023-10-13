@@ -1,4 +1,6 @@
-<script>
+<script lang="ts">
+    import { _alert, Toaster } from "$lib/utils/CustomAlert";
+
     let accommodation = {
         accommodation_name: "",
         location: "",
@@ -10,6 +12,9 @@
         check_out_date: "",
     };
 
+    let success: boolean;
+    let message: string;
+
     const handleSubmit = async () => {
         const resp = await fetch("/api/register/accommodation", {
             method: "POST",
@@ -19,10 +24,18 @@
                 accept: "application/json",
             },
         }).then((res) => res.json());
-        alert(JSON.stringify(resp));
+        if (resp.acknowledged && resp?.insertedId) {
+            success = true;
+            message = "Accommodation added successfully.";
+        } else {
+            success = false;
+            message = "Failed to add accommodation.";
+        }
+        _alert(success, message);
     };
 </script>
 
+<Toaster />
 <form on:submit={handleSubmit}>
     <div class="form-control">
         <label class="label" for="accommodation_name">Accommodation Name</label>

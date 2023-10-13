@@ -4,19 +4,33 @@
     import type { PageData } from "./$types";
     export let data: PageData;
     $: ({ travelers } = data);
+
     const edit_id = (id: string) => {
         goto(`/register/traveler/${id}`);
     };
-    let modal: HTMLDialogElement;
-    let success_modal: HTMLDialogElement;
-    let id_to_delete: string;
+
+    import ConfirmModal, {
+        showConfirmModal,
+        closeConfirmModal,
+    } from "$lib/components/confirm_modal.svelte";
+
+    import { _alert, Toaster } from "$lib/utils/CustomAlert";
+
+    let target_id: string;
+    let success: boolean;
+    let message: string;
+
+    const confirm_delete = async (id: string) => {
+        target_id = id;
+        showConfirmModal();
+    };
 
     const delete_id = async () => {
-        modal.close();
+        closeConfirmModal();
         const resp = await fetch("/api/register/traveler", {
             method: "DELETE",
             body: JSON.stringify({
-                traveler_id: id_to_delete,
+                traveler_id: target_id,
             }),
             headers: {
                 accept: "application/json",
@@ -24,60 +38,19 @@
             },
         }).then((res) => res.json());
         if (resp.acknowledged && resp.deletedCount) {
-            success_modal.showModal();
+            success = true;
+            message = "Traveler deleted successfully.";
+        } else {
+            success = false;
+            message = "Failed to delete traveler.";
         }
+        _alert(success, message);
         await invalidateAll();
-    };
-
-    const confirm_delete = async (id: string) => {
-        modal.showModal();
-        id_to_delete = id;
     };
 </script>
 
-<!-- You can open the modal using ID.showModal() method -->
-<dialog class="modal" bind:this={modal}>
-    <div class="modal-box">
-        <form method="dialog">
-            <button
-                class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-                >✕</button
-            >
-        </form>
-        <h3 class="font-bold text-lg">Confirm</h3>
-        <p class="py-4">
-            Are you sure you want to delete this data?<br />This action is
-            irreversible.
-        </p>
-        <div class="flex justify-end gap-1">
-            <button
-                class="btn btn-primary"
-                on:click={async (event) => {
-                    await delete_id();
-                }}>Yes</button
-            >
-            <button
-                class="btn btn-secondary"
-                on:click={(event) => {
-                    modal.close();
-                }}>No</button
-            >
-        </div>
-    </div>
-</dialog>
-
-<dialog id="success_modal" class="modal" bind:this={success_modal}>
-    <div class="modal-box">
-        <form method="dialog">
-            <button
-                class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-                >✕</button
-            >
-        </form>
-        <h3 class="font-bold text-lg">Success</h3>
-        <p class="py-4">Traveler deleted successfully.</p>
-    </div>
-</dialog>
+<ConfirmModal {delete_id} />
+<Toaster />
 
 <table class="table table-auto">
     <caption class="text-2xl m-2">TRAVELERS</caption>

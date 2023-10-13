@@ -1,7 +1,9 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
+
     import type { PageData } from "./$types";
     export let data: PageData;
+    import { _alert, Toaster } from "$lib/utils/CustomAlert";
 
     let accommodation = {
         accommodation_name: "",
@@ -13,7 +15,11 @@
         check_in_date: "",
         check_out_date: "",
     };
+
     accommodation = data.traveler_data[0];
+
+    let success: boolean;
+    let message: string;
 
     const handleSubmit = async (event: Event) => {
         event.preventDefault();
@@ -25,13 +31,31 @@
                 accept: "application/json",
             },
         }).then((res) => res.json());
-        alert(JSON.stringify(resp));
+        if (resp.acknowledged && resp.modifiedCount) {
+            success = true;
+            message = "Accommodation updated successfully.";
+        } else {
+            success = false;
+            message =
+                resp?.matchedCount > 0 && !resp?.modifiedCount
+                    ? "No changes detected."
+                    : "Failed to update accommodation.";
+            // print a log coz why not?
+            console.log(
+                `[${Date.now()}] Hey Developer You Got a Problem: ${JSON.stringify(
+                    resp
+                )}`
+            );
+        }
+        _alert(success, message);
     };
     const back = () => {
         goto("/accommodations");
     };
 </script>
 
+<!-- <AlertModal {success} {message} /> -->
+<Toaster />
 <form on:submit={handleSubmit}>
     <div class="form-control">
         <label class="label" for="accommodation_name">Accommodation Name</label>

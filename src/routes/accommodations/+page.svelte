@@ -1,28 +1,59 @@
 <script lang="ts">
     import { goto, invalidateAll } from "$app/navigation";
     import type { PageData } from "./$types";
+    
+    import ConfirmModal, {
+        showConfirmModal,
+        closeConfirmModal,
+    } from "$lib/components/confirm_modal.svelte";
 
+    import { _alert, Toaster } from "$lib/utils/CustomAlert";
+
+    let success: boolean;
+    let message: string;
     export let data: PageData;
     $: ({ accommodations } = data);
+
     const edit_id = (id: string) => {
-        goto(`/register/accommodation/${id}`);
+        goto(`/register/accommodation/${id}`, { invalidateAll: true });
     };
 
+    let target_id: string;
+
     const confirm_delete = async (id: string) => {
+        target_id = id;
+        showConfirmModal();
+    };
+
+    // this will be called from the modal
+    const delete_id = async () => {
+        closeConfirmModal();
         const resp = await fetch("/api/register/accommodation", {
             method: "DELETE",
             body: JSON.stringify({
-                accommodation_id: id,
+                accommodation_id: target_id,
             }),
             headers: {
                 accept: "application/json",
                 "content-type": "application/json",
             },
         }).then((res) => res.json());
+        if (resp.acknowledged && resp.deletedCount) {
+            success = true;
+            message = "Accommodation deleted successfully.";
+        } else {
+            success = false;
+            message = "Failed to delete accommodation.";
+        }
+        _alert(success, message);
         await invalidateAll();
-        alert(`BYE BYE: ${JSON.stringify(resp)}`);
     };
 </script>
+
+<!-- I actually made it. Yatta -->
+<ConfirmModal {delete_id} />
+<Toaster />
+<!-- HAHAHA I'm so happy :) -->
 
 <table class="table table-auto">
     <caption class="text-2xl m-2">ACCOMMODATIONS</caption>
@@ -81,7 +112,9 @@
                     <button
                         class="btn btn-secondary w-full mt-1"
                         on:click={async (event) => {
-                            await confirm_delete(accommodation.accommodation_id);
+                            await confirm_delete(
+                                accommodation.accommodation_id
+                            );
                         }}
                         ><svg
                             viewBox="0 0 448 512"

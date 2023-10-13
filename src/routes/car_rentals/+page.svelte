@@ -7,22 +7,48 @@
     const edit_id = (id: string) => {
         goto(`/register/car_rental/${id}`);
     };
+    import ConfirmModal, {
+        showConfirmModal,
+        closeConfirmModal,
+    } from "$lib/components/confirm_modal.svelte";
+
+    import { _alert, Toaster } from "$lib/utils/CustomAlert";
+
+    let target_id: string;
+    let success: boolean;
+    let message: string;
 
     const confirm_delete = async (id: string) => {
+        target_id = id;
+        showConfirmModal();
+    };
+
+    const delete_id = async () => {
+        closeConfirmModal();
         const resp = await fetch("/api/register/car_rental", {
             method: "DELETE",
             body: JSON.stringify({
-                car_rental_id: id,
+                car_rental_id: target_id,
             }),
             headers: {
                 accept: "application/json",
                 "content-type": "application/json",
             },
         }).then((res) => res.json());
+        if (resp.acknowledged && resp.deletedCount) {
+            success = true;
+            message = "CarRental deleted successfully.";
+        } else {
+            success = false;
+            message = "Failed to delete CarRental.";
+        }
+        _alert(success, message);
         await invalidateAll();
-        alert(`BYE BYE: ${JSON.stringify(resp)}`);
     };
 </script>
+
+<ConfirmModal {delete_id} />
+<Toaster />
 
 <table class="table table-auto">
     <caption class="text-2xl m-2">CAR RENTALS</caption>

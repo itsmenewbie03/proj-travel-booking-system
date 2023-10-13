@@ -5,26 +5,51 @@
     export let data: PageData;
 
     $: ({ flights } = data);
-    
+    import ConfirmModal, {
+        showConfirmModal,
+        closeConfirmModal,
+    } from "$lib/components/confirm_modal.svelte";
+
+    import { _alert, Toaster } from "$lib/utils/CustomAlert";
+
+    let target_id: string;
+    let success: boolean;
+    let message: string;
+
+    const confirm_delete = async (id: string) => {
+        target_id = id;
+        showConfirmModal();
+    };
     const edit_id = (id: string) => {
         goto(`/register/flight/${id}`);
     };
 
-    const confirm_delete = async (id: string) => {
+    const delete_id = async () => {
+        closeConfirmModal();
         const resp = await fetch("/api/register/flight", {
             method: "DELETE",
             body: JSON.stringify({
-                flight_id: id,
+                flight_id: target_id,
             }),
             headers: {
                 accept: "application/json",
                 "content-type": "application/json",
             },
         }).then((res) => res.json());
+        if (resp.acknowledged && resp.deletedCount) {
+            success = true;
+            message = "Flight deleted successfully.";
+        } else {
+            success = false;
+            message = "Failed to delete flight.";
+        }
+        _alert(success, message);
         await invalidateAll();
-        alert(`BYE BYE: ${JSON.stringify(resp)}`);
     };
 </script>
+
+<ConfirmModal {delete_id} />
+<Toaster />
 
 <table class="table table-auto">
     <caption class="text-2xl m-2">FLIGHTS</caption>
